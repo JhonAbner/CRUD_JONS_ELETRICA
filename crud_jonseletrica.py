@@ -80,7 +80,7 @@ def orcamento(lista_servicos):
 
     while True:
         try:
-            servico_orcamento = int(input("\nDigite o número do serviço desejado ou 0 para sair: "))
+            servico_orcamento = int(input("\nDigite o ID do serviço desejado ou 0 para sair: "))
         except ValueError:
             print("Entrada inválida.")
             time.sleep(1)
@@ -92,7 +92,23 @@ def orcamento(lista_servicos):
         servico = ler(lista_servicos, servico_orcamento)
 
         if servico:
-            orcamento_servico.append(servico)
+            try:
+                quantidade = int(input("Digite a quantidade: "))
+                if quantidade <= 0:
+                    print("Quantidade deve ser maior que zero.")
+                    time.sleep(1)
+                    continue
+            except ValueError:
+                print("Quantidade inválida.")
+                time.sleep(1)
+                continue
+
+            orcamento_servico.append({
+                "nome": servico["nome"],
+                "valor": servico["valor"],
+                "quantidade": quantidade
+            })
+
             print(f"\nServiço '{servico['nome']}' adicionado ao orçamento!")
         else:
             print("\nServiço não encontrado!")
@@ -100,13 +116,15 @@ def orcamento(lista_servicos):
         time.sleep(0.5)
 
     if orcamento_servico:
-        total = sum(i['valor'] for i in orcamento_servico)
+        total = 0
 
         print("\n=== Orçamento Final ===")
         for i in orcamento_servico:
-            print(f"- {i['nome']}: R${i['valor']:.2f}")
+            subtotal = i["valor"] * i["quantidade"]
+            total += subtotal
+            print(f"- {i['nome']} | Qtd: {i['quantidade']} | Unit: R${i['valor']:.2f} | Subtotal: R${subtotal:.2f}")
 
-        print(f"Total a pagar: R${total:.2f}")
+        print(f"\nTotal a pagar: R${total:.2f}")
         input("\nPressione Enter para voltar ao menu...")
         os.system('cls')
 
@@ -137,9 +155,10 @@ def menu():
         print("\n=== Gerenciamento de Serviços - Jon's Elétrica ===")
         print("1 - Listar Serviços")
         print("2 - Criar Serviços")
-        print("3 - Orçamento")
+        print("3 - Ler Serviço por ID")
         print("4 - Atualizar Serviços")
         print("5 - Deletar Serviços")
+        print("6 - Orçamento")
         print("0 - Sair")
 
         try:
@@ -155,7 +174,23 @@ def menu():
             criar_servico(lista_servicos)
 
         elif op == 3:
-            orcamento(lista_servicos)
+            try:
+                id_servico = int(input("\nDigite o ID do serviço: ").strip())
+            except ValueError:
+                print("Entrada inválida.")
+                time.sleep(1)
+                continue
+
+            servico = ler(lista_servicos, id_servico)
+
+            if servico:
+                print(f"\nID: {servico['id']}")
+                print(f"Serviço: {servico['nome']}")
+                print(f"Valor: R${servico['valor']}")
+            else:
+                print("Serviço não encontrado.")
+
+            time.sleep(2)
 
         elif op == 4:
             servicos(lista_servicos)
@@ -167,7 +202,6 @@ def menu():
                 time.sleep(1)
                 continue
 
-            # ✅ Verificando com ler()
             servico = ler(lista_servicos, id_servico)
 
             if servico is None:
@@ -210,6 +244,9 @@ def menu():
 
             print("Serviço Deletado." if resultado else "Serviço não encontrado.")
             time.sleep(1)
+
+        elif op == 6:
+            orcamento(lista_servicos)
 
         elif op == 0:
             print("Saindo do sistema", end="", flush=True)
