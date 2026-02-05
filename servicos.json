@@ -8,10 +8,5 @@
         "id": 2,
         "nome": "Instalação Tomada",
         "valor": 80.0
-    },
-    {
-        "id": 3,
-        "nome": "Instalação Rede Geral",
-        "valor": 120.0
     }
 ]

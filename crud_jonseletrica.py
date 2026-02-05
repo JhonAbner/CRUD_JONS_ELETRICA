@@ -87,11 +87,23 @@ def orcamento(lista_servicos):
         input("\nPressione Enter para voltar ao menu...")
         os.system('cls')
 
-def atualizar_servico():
-    pass
+def atualizar_servico(lista_servicos, id_servico, nome_servico, valor_servico):
+    for item in lista_servicos:
+        if item["id"] == id_servico:
+            if nome_servico is not None:
+                item["nome"] = nome_servico
+            if valor_servico is not None:
+                item["valor"] = valor_servico
+            salvar(lista_servicos)
+    return None
 
-def deletar_servico():
-    pass
+def deletar_servico(lista_servicos, id_servico):
+    for item in lista_servicos:
+        if item["id"] == id_servico:
+            lista_servicos.remove(item)
+            salvar(lista_servicos)
+            return True
+    return False
 
 def menu():
     lista_servicos = carregar()
@@ -112,12 +124,38 @@ def menu():
         elif op == 3:
             orcamento(lista_servicos)
         elif op == 4:
-            atualizar_servico()
+            servicos(lista_servicos)
+            try:
+                id_servico = int(input("\nDigite o ID do serviço que deseja atualizar: ").strip())
+            except ValueError:
+                print("Entrada inválida.")
+                time.sleep(1)
+                continue
+            nome_servico = input("Digite o nome do serviço (ou Enter para manter): ").strip()
+            valor_servico = input("Digite o valor do serviço (ou Enter para manter): ").strip()
+            if valor_servico == "":
+                valor_servico = None
+            else:
+                valor_servico = float(valor_servico)
+            resultado = atualizar_servico(lista_servicos, id_servico, nome_servico or None, valor_servico)
+            print(resultado or "Não encontrado.")
+            time.sleep(1)
+            os.system('cls')
         elif op == 5:
-            deletar_servico()
+            servicos(lista_servicos)
+            try:
+                id_servico = int(input("\nDigite o ID do serviço que deseja deletar: ").strip())
+            except ValueError:
+                print("Entrada inválida.")
+                time.sleep(1)
+                continue
+            resultado = deletar_servico(lista_servicos, id_servico)
+            print("Serviço Deletado." if resultado else "Serviço não encontrado.")
+            time.sleep(1)
+            os.system('cls')
         elif op == 0:
             print("Saindo do sistema", end="", flush=True)
-            for i in range(10):
+            for i in range(5):
                 time.sleep(0.2)
                 print(".", end="", flush=True)
             print()
