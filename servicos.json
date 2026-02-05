@@ -8,5 +8,20 @@
         "id": 2,
         "nome": "Instalação Tomada",
         "valor": 80.0
+    },
+    {
+        "id": 3,
+        "nome": "Instalação Spots",
+        "valor": 60.0
+    },
+    {
+        "id": 4,
+        "nome": "Instalação Pendente",
+        "valor": 75.0
+    },
+    {
+        "id": 5,
+        "nome": "Automação Casa",
+        "valor": 350.0
     }
 ]
